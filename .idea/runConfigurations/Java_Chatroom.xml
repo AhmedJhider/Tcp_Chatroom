@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Java_Chatroom" type="Application" factoryName="Application" singleton="false">
-    <option name="MAIN_CLASS_NAME" value="EchoClient" />
+    <option name="MAIN_CLASS_NAME" value="Client" />
     <module name="Java_Chatroom" />
     <method v="2">
       <option name="Make" enabled="true" />
