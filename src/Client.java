@@ -16,10 +16,12 @@ public class Client {
             Socket socket = new Socket("localhost",9806);
 
             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("write username: ");
+            System.out.println("---LOGIN---");
+            System.out.println("username: ");
             String username = userInput.readLine();
             Client client = new Client(socket,username);
             client.listenToMessage();
+
             String message;
             while((message = userInput.readLine())!=null){
                 client.out.println(message);

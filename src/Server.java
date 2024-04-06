@@ -1,11 +1,12 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.util.ArrayList;
-
 public class Server {
     public static void main(String[] args) {
         try{
+            DatabaseHandler Db = new DatabaseHandler();
             System.out.println("Waiting for clients ...");
             ServerSocket ss = new ServerSocket(9806);
             while (true){
@@ -28,12 +29,12 @@ public class Server {
 
         public ClientHandler(Socket socket){
             try{
-            this.clientSocket = socket;
-            out = new PrintWriter(this.clientSocket.getOutputStream(),true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            username = in.readLine();
-            clientHandlers.add(this);
-            broadcastMessage(username+" has connected to chatroom");
+                this.clientSocket = socket;
+                out = new PrintWriter(this.clientSocket.getOutputStream(),true);
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                username = in.readLine();
+                clientHandlers.add(this);
+                broadcastMessage(username+" has connected to chatroom");
             }catch(IOException e){
                 // catch
             }
