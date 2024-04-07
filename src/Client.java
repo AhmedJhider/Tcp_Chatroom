@@ -11,33 +11,38 @@ public class Client {
     private String username;
 
     public static void main(String[] args) {
-        try {
-            System.out.println("client started");
-            Socket socket = new Socket("localhost",9806);
-
-            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("---LOGIN---");
-            System.out.println("username: ");
-            String username = userInput.readLine();
-            Client client = new Client(socket,username);
-            client.listenToMessage();
-
-            String message;
-            while((message = userInput.readLine())!=null){
-                client.out.println(message);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println("client started");
+//            Socket socket = new Socket("localhost",9806);
+//            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+//            System.out.println("---LOGIN---");
+//            System.out.println("username: ");
+//            String username = userInput.readLine();
+//            Client client = new Client(socket,username);
+//            client.listenToMessage();
+//
+//            String message;
+//            while((message = userInput.readLine())!=null){
+//                client.out.println(message);
+//            }
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
     }
-
-    public Client(Socket socket, String username){
+    public static boolean connect(){
+        try{
+        Socket socket = new Socket("localhost",9806);
+        Client client = new Client(socket);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+    public Client(Socket socket){
         try{
             this.socket = socket;
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);
-            this.username = username;
-            out.println(username);
         }catch(IOException e){
             // catch
         }

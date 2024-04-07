@@ -2,11 +2,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 public class Server {
+    private static DatabaseHandler Db = new DatabaseHandler();
+
     public static void main(String[] args) {
         try{
-            DatabaseHandler Db = new DatabaseHandler();
+            Db = new DatabaseHandler();
             System.out.println("Waiting for clients ...");
             ServerSocket ss = new ServerSocket(9806);
             while (true){
@@ -18,6 +21,13 @@ public class Server {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public static boolean verifSignup(String username) throws SQLException {
+        ResultSet result = Db.exeQuery("SELECT * FROM users WHERE name = '"+username+"'");
+        return result.next();
+    }
+    public static void execSignup(String username) throws SQLException{
+        Db.exeInsert("INSERT users(name) VALUES ('"+username+"')");
     }
     static class ClientHandler implements Runnable{
         public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
@@ -32,7 +42,6 @@ public class Server {
                 this.clientSocket = socket;
                 out = new PrintWriter(this.clientSocket.getOutputStream(),true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                username = in.readLine();
                 clientHandlers.add(this);
                 broadcastMessage(username+" has connected to chatroom");
             }catch(IOException e){
