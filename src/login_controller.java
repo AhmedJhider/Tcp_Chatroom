@@ -1,23 +1,18 @@
-import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
-import javax.swing.*;
 import java.sql.SQLException;
 import java.util.Objects;
 
 
-public class SampleController {
+public class login_controller {
     private boolean con;
     private Alert alertDisco;
     @FXML
-    private TextField textSignup;
+    private TextField textSignup, textLogin;
     @FXML
     private Label title;
     @FXML
@@ -45,6 +40,7 @@ public class SampleController {
         if(con){
             welcome_page.setVisible(false);
             signup_page.setVisible(true);
+            textSignup.clear();
             esc.setVisible(true);
             textSignup.setStyle("");
             title.requestFocus();
@@ -57,13 +53,14 @@ public class SampleController {
     public void requestSignup(ActionEvent event) throws SQLException {
         String username = textSignup.getText();
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("INVALID");
-        alert.setHeaderText("Username Already Taken");
+
         if(Objects.equals(username, "")){
             textSignup.setStyle("-fx-border-color: #cc0e2e; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 2%;");
         }else{
             textSignup.setStyle("");
             if(Server.verifSignup(username)){
+                alert.setTitle("INVALID");
+                alert.setHeaderText("Username Already Taken");
                 alert.showAndWait();
             }else{
                 Server.execSignup(username);
@@ -74,10 +71,31 @@ public class SampleController {
             }
         }
     }
+    public void requestLogin(ActionEvent event) throws SQLException {
+        String username = textLogin.getText();
+        Alert alert = new Alert(AlertType.INFORMATION);
+        if(Objects.equals(username, "")){
+            textSignup.setStyle("-fx-border-color: #cc0e2e; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 2%;");
+        }else{
+            textSignup.setStyle("");
+            System.out.println(Server.verifSignup(username));
+            if(Server.verifSignup(username)== true){
+                alert.setTitle("LOGGED-IN");
+                alert.setHeaderText("Login Successful");
+                alert.showAndWait();
+            }else{
+                alert.setTitle("INVALID");
+                alert.setHeaderText("Recheck your username");
+                alert.showAndWait();
+
+            }
+        }
+    }
     public void getLoginPage(ActionEvent event){
         if(con){
             welcome_page.setVisible(false);
             login_page.setVisible(true);
+            textLogin.clear();
             esc.setVisible(true);
             title.requestFocus();
         }else{

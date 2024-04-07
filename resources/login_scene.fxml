@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="269.0" prefWidth="346.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SampleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="269.0" prefWidth="346.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_controller">
    <Button fx:id="esc" alignment="CENTER" layoutX="5.0" layoutY="5.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#getWelcomePage" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 50%; -fx-background-color: #cc0e2e;" text="-" textFill="WHITE" textOverrun="CLIP" visible="false">
       <rotationAxis>
          <Point3D />
@@ -23,7 +23,7 @@
    <AnchorPane fx:id="signup_page" layoutX="73.0" layoutY="90.0" prefHeight="110.0" prefWidth="195.0" visible="false">
       <children>
          <TextField fx:id="textSignup" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="179.0" promptText="Create Username" />
-         <Button fx:id="f_signup" onAction="#requestSignup" layoutX="27.0" layoutY="60.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="146.0" text="SIGNUP">
+         <Button fx:id="f_signup" layoutX="27.0" layoutY="60.0" mnemonicParsing="false" onAction="#requestSignup" prefHeight="34.0" prefWidth="146.0" text="SIGNUP">
             <font>
                <Font name="HP Simplified" size="12.0" />
             </font>
@@ -44,10 +44,10 @@
          </Button>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="login_page" layoutX="73.0" layoutY="90.0" prefHeight="110.0" prefWidth="195.0" visible="false">
+   <AnchorPane fx:id="login_page" layoutX="73.0" layoutY="90.0" prefHeight="110.0" prefWidth="267.0" visible="false">
       <children>
          <TextField fx:id="textLogin" layoutX="10.0" layoutY="26.0" prefHeight="26.0" prefWidth="179.0" promptText="Enter Username" />
-         <Button fx:id="f_login" layoutX="27.0" layoutY="60.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="146.0" text="LOGIN">
+         <Button fx:id="f_login" layoutX="27.0" layoutY="60.0" mnemonicParsing="false" onAction="#requestLogin" prefHeight="34.0" prefWidth="146.0" text="LOGIN">
             <font>
                <Font name="HP Simplified" size="12.0" />
             </font>
