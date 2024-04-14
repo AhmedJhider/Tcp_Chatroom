@@ -1,9 +1,15 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -21,6 +27,11 @@ public class login_controller {
     private Button esc;
     @FXML
     private AnchorPane welcome_page, signup_page, login_page;
+    private Stage primaryStage;
+
+    public void setStage(Stage primaryStage){
+        this.primaryStage = primaryStage;
+    }
 
     public void initialize(){
         title.requestFocus();
@@ -71,7 +82,7 @@ public class login_controller {
             }
         }
     }
-    public void requestLogin(ActionEvent event) throws SQLException {
+    public void requestLogin(ActionEvent event) throws SQLException, IOException {
         String username = textLogin.getText();
         Alert alert = new Alert(AlertType.INFORMATION);
         if(Objects.equals(username, "")){
@@ -79,10 +90,14 @@ public class login_controller {
         }else{
             textSignup.setStyle("");
             System.out.println(Server.verifSignup(username));
-            if(Server.verifSignup(username)== true){
+            if(Server.verifSignup(username)){
                 alert.setTitle("LOGGED-IN");
                 alert.setHeaderText("Login Successful");
                 alert.showAndWait();
+                FXMLLoader loader = new FXMLLoader(new File("resources/main_scene.fxml").toURI().toURL());
+                Parent root = loader.load();
+                Scene scene = new Scene(root, 364, 269);
+                primaryStage.setScene(scene);
             }else{
                 alert.setTitle("INVALID");
                 alert.setHeaderText("Recheck your username");

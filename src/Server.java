@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 public class Server {
     private static DatabaseHandler Db = new DatabaseHandler();
 
@@ -45,6 +46,7 @@ public class Server {
                 this.clientSocket = socket;
                 out = new PrintWriter(this.clientSocket.getOutputStream(),true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                username = in.readLine();
                 clientHandlers.add(this);
                 broadcastMessage(username+" has connected to chatroom");
             }catch(IOException e){
@@ -65,7 +67,7 @@ public class Server {
 
         public void broadcastMessage(String message){
             for (ClientHandler clientHandler : clientHandlers){
-                if (clientHandler.username != username){
+                if (clientHandler.username != this.username){
                     clientHandler.out.println(message);
                 }
             }

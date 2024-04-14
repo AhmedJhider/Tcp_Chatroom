@@ -12,7 +12,7 @@ public class DatabaseHandler {
             this.connection = DriverManager.getConnection(url,username,password);
             this.statement= connection.createStatement();
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println("fuck");
         }
     }
     public ResultSet exeQuery(String query) throws SQLException {
