@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Objects;
 
 public class Client {
     private Socket socket;
@@ -10,44 +11,40 @@ public class Client {
     private PrintWriter out;
     private String username;
 
-    public static void main(String[] args) {
-        try {
-            System.out.println("client started");
-            Socket socket = new Socket("localhost",9806);
-            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("---LOGIN---");
-            System.out.println("username: ");
-            String username = userInput.readLine();
-            Client client = new Client(socket,username);
-            client.listenToMessage();
-
-            String message;
-            while((message = userInput.readLine())!=null){
-                client.out.println(message);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-    public static boolean connect(){
+    public static boolean connectionChecker() throws IOException {
         try{
-        Socket socket = new Socket("localhost",9806);
-        Client client = new Client(socket,"test");
-        }catch(Exception e){
+            Socket socket = new Socket("localhost",9806);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out.println("PING");
+            String message = in.readLine();
+            socket.close();
+            return Objects.equals(message, "PONG");
+        }catch (IOException e){
             return false;
         }
-        return true;
     }
-    public Client(Socket socket,String username){
+//    public static void main(String[] args) {
+//        try {
+//            System.out.println("client started");
+//            Socket socket = new Socket("localhost",9806);
+//            Client client = new Client(socket);
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+    public Client(Socket socket){
         try{
             this.socket = socket;
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);
-            out.println(username);
-            this.username= username;
         }catch(IOException e){
             // catch
         }
+    }
+    public void setUsername(String username){
+        this.username = username;
+        out.println(username);
     }
 
     public void listenToMessage(){

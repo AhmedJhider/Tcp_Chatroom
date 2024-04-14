@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Server {
     private static DatabaseHandler Db = new DatabaseHandler();
@@ -23,7 +24,7 @@ public class Server {
                 clientHandler.start();
             }
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
     public static boolean verifSignup(String username) throws SQLException {
@@ -46,12 +47,18 @@ public class Server {
                 this.clientSocket = socket;
                 out = new PrintWriter(this.clientSocket.getOutputStream(),true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                username = in.readLine();
-                clientHandlers.add(this);
-                broadcastMessage(username+" has connected to chatroom");
+                String message = in.readLine();
+                if(Objects.equals(message, "PING")){
+                    out.println("PONG");
+                    clientSocket.close();
+                }
             }catch(IOException e){
-                // catch
+                System.out.println(e);
             }
+        }
+        public void setUsername(String username) throws IOException {
+            this.username = in.readLine();
+            System.out.println(this.username);
         }
 
         @Override

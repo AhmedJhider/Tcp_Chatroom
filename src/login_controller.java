@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -28,18 +29,23 @@ public class login_controller {
     @FXML
     private AnchorPane welcome_page, signup_page, login_page;
     private Stage primaryStage;
+    private Client client;
 
     public void setStage(Stage primaryStage){
         this.primaryStage = primaryStage;
     }
 
-    public void initialize(){
-        title.requestFocus();
+    public boolean connect() throws IOException {
+        return Client.connectionChecker();
+    }
 
+    public void initialize() throws IOException {
+        title.requestFocus();
         alertDisco = new Alert(AlertType.INFORMATION);
         alertDisco.setTitle("Connection Issue");
         alertDisco.setHeaderText("Connection Failed");
-        if(!Client.connect()){
+        System.out.println(connect());
+        if(!connect()){
             alertDisco.showAndWait();
             con = false;
         }else{
@@ -47,7 +53,7 @@ public class login_controller {
         }
     }
 
-    public void getSignupPage(ActionEvent event){
+    public void getSignupPage(ActionEvent event) throws IOException {
         if(con){
             welcome_page.setVisible(false);
             signup_page.setVisible(true);
@@ -57,7 +63,7 @@ public class login_controller {
             title.requestFocus();
         }else{
             alertDisco.showAndWait();
-            con = Client.connect();
+            con = connect();
         }
 
     }
@@ -88,25 +94,19 @@ public class login_controller {
         if(Objects.equals(username, "")){
             textSignup.setStyle("-fx-border-color: #cc0e2e; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 2%;");
         }else{
-            textSignup.setStyle("");
-            System.out.println(Server.verifSignup(username));
             if(Server.verifSignup(username)){
-                alert.setTitle("LOGGED-IN");
-                alert.setHeaderText("Login Successful");
-                alert.showAndWait();
+                client.setUsername(username);
                 FXMLLoader loader = new FXMLLoader(new File("resources/main_scene.fxml").toURI().toURL());
                 Parent root = loader.load();
                 Scene scene = new Scene(root, 364, 269);
                 primaryStage.setScene(scene);
-            }else{
-                alert.setTitle("INVALID");
-                alert.setHeaderText("Recheck your username");
-                alert.showAndWait();
 
+            }else{
+                textLogin.setStyle("-fx-border-color: #cc0e2e; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 2%;");
             }
         }
     }
-    public void getLoginPage(ActionEvent event){
+    public void getLoginPage(ActionEvent event) throws IOException {
         if(con){
             welcome_page.setVisible(false);
             login_page.setVisible(true);
@@ -115,8 +115,7 @@ public class login_controller {
             title.requestFocus();
         }else{
             alertDisco.showAndWait();
-            con = Client.connect();
-
+            con = connect();
         }
 
     }
@@ -126,7 +125,5 @@ public class login_controller {
         esc.setVisible(false);
         login_page.setVisible(false);
         title.requestFocus();
-
-
     }
 }
