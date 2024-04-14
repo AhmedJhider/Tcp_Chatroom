@@ -44,7 +44,6 @@ public class login_controller {
         alertDisco = new Alert(AlertType.INFORMATION);
         alertDisco.setTitle("Connection Issue");
         alertDisco.setHeaderText("Connection Failed");
-        System.out.println(connect());
         if(!connect()){
             alertDisco.showAndWait();
             con = false;
@@ -95,12 +94,12 @@ public class login_controller {
             textSignup.setStyle("-fx-border-color: #cc0e2e; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 2%;");
         }else{
             if(Server.verifSignup(username)){
-                client.setUsername(username);
+                Socket socket = new Socket("localhost",9806);
+                Client client = new Client(socket,username);
                 FXMLLoader loader = new FXMLLoader(new File("resources/main_scene.fxml").toURI().toURL());
                 Parent root = loader.load();
                 Scene scene = new Scene(root, 364, 269);
                 primaryStage.setScene(scene);
-
             }else{
                 textLogin.setStyle("-fx-border-color: #cc0e2e; -fx-border-width: 1px; -fx-border-style: solid; -fx-border-radius: 2%;");
             }

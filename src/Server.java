@@ -20,8 +20,18 @@ public class Server {
             while (true){
                 Socket soc = ss.accept();
                 System.out.println("Connection established " + soc.getInetAddress());
-                Thread clientHandler = new Thread(new ClientHandler(soc));
-                clientHandler.start();
+                PrintWriter out = new PrintWriter(soc.getOutputStream(),true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+                String message = in.readLine();
+                if(Objects.equals(message, "PING")){
+                    System.out.println("ponged it back");
+                    out.println("PONG");
+                    soc.close();
+                }else{
+                    System.out.println(message+ " in");
+                    Thread clientHandler = new Thread(new ClientHandler(soc,message));
+                    clientHandler.start();
+                }
             }
         }catch (Exception e){
             System.out.println(e);
@@ -42,30 +52,22 @@ public class Server {
         private PrintWriter out;
         private BufferedReader in;
 
-        public ClientHandler(Socket socket){
+        public ClientHandler(Socket socket, String username){
             try{
                 this.clientSocket = socket;
+                this.username = username;
                 out = new PrintWriter(this.clientSocket.getOutputStream(),true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String message = in.readLine();
-                if(Objects.equals(message, "PING")){
-                    out.println("PONG");
-                    clientSocket.close();
-                }
             }catch(IOException e){
                 System.out.println(e);
             }
-        }
-        public void setUsername(String username) throws IOException {
-            this.username = in.readLine();
-            System.out.println(this.username);
         }
 
         @Override
         public void run(){
             try{
                 while ((message = in.readLine())!=null){
-                broadcastMessage(username+" : "+message);
+                    broadcastMessage(username+" : "+message);
                 }
             }catch (Exception e){
                 broadcastMessage(username+" has disconnected");

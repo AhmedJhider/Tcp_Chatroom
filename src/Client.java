@@ -33,18 +33,16 @@ public class Client {
 //            e.printStackTrace();
 //        }
 //    }
-    public Client(Socket socket){
+    public Client(Socket socket,String username){
         try{
             this.socket = socket;
+            this.username = username;
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(username);
         }catch(IOException e){
-            // catch
+            System.out.println(e);
         }
-    }
-    public void setUsername(String username){
-        this.username = username;
-        out.println(username);
     }
 
     public void listenToMessage(){
